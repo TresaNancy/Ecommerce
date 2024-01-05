@@ -3,205 +3,81 @@
  <div class="col-lg-3 col-md-4">
     <!-- Price Start -->
     <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by price</span></h5>
-    <div class="bg-light p-4 mb-30">
-        <form method="get" action="{% url 'product_filter' %}">
-            <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                <input type="checkbox" class="custom-control-input" id="price-all" name="price_all" {% if not request.GET.price_all %}checked{% endif %}>
-                <label class="custom-control-label" for="price-all">All Price</label>
-                <span class="badge border font-weight-normal">1000</span>
-            </div>
-            <!-- Add dynamic price range checkboxes based on your data -->
-            {% for price_range in price_ranges %}
-            <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                <input type="checkbox" class="custom-control-input" id="price-{{ price_range.id }}" name="price_range" value="{{ price_range.id }}" {% if request.GET.price_range == price_range.id %}checked{% endif %}>
-                <label class="custom-control-label" for="price-{{ price_range.id }}">{{ price_range.range_start }} - {{ price_range.range_end }}</label>
-                <span class="badge border font-weight-normal">{{ price_range.product_count }}</span>
-            </div>
-            {% endfor %}
-            <button type="submit" class="btn btn-primary">Apply Filter</button>
-           
-        </form>
-    </div>
+    <!-- Price range filter -->
+<div class="bg-light p-4 mb-30">
+    <form method="GET">
+        <!-- ... (existing color filter code) ... -->
+        
+        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+            <input type="checkbox" class="custom-control-input" id="price-all" name="price_all" value="on" {% if 'price_all' in request.GET %} checked {% endif %}>
+            <label class="custom-control-label" for="price-all">All Prices</label>
+        </div>
+        {% for price_range in price_ranges %}
+            {% with min_price=price_range.0|stringformat:"d" max_price=price_range.1|stringformat:"d" %}
+                <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                    <input type="checkbox" class="custom-control-input" id="price-{{ forloop.counter }}" name="price" value="{{ forloop.counter }}"
+                    {% if forloop.counter|stringformat:"d" in selected_prices %} checked {% endif %}>
+                    <label class="custom-control-label" for="price-{{ forloop.counter }}">
+                        {% if max_price %}
+                            ${{ min_price }} - ${{ max_price }}
+                        {% else %}
+                            ${{ min_price }} and above
+                        {% endif %}
+                    </label>
+                </div>
+            {% endwith %}
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Apply</button>
+
+    </form>
+</div>
+
+  
     <!-- Price End -->
     
     <!-- Color Start -->
-    <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by color</span></h5>
+    <h5 class="section-title position-relative text-uppercase mb-3">
+        <span class="bg-secondary pr-3">Filter by color</span>
+    </h5>
     <div class="bg-light p-4 mb-30">
-        <form>
+        <form method="GET">
             <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                <input type="checkbox" class="custom-control-input" checked id="color-all">
-                <label class="custom-control-label" for="price-all">All Color</label>
+                <input type="checkbox" class="custom-control-input" checked id="color-all" name="color" value="all">
+                <label class="custom-control-label" for="color-all">All Color</label>
                 <span class="badge border font-weight-normal">1000</span>
             </div>
-            <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                <input type="checkbox" class="custom-control-input" id="color-1">
-                <label class="custom-control-label" for="color-1">Black</label>
-                <span class="badge border font-weight-normal">150</span>
-            </div>
-            <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                <input type="checkbox" class="custom-control-input" id="color-2">
-                <label class="custom-control-label" for="color-2">White</label>
-                <span class="badge border font-weight-normal">295</span>
-            </div>
-            <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                <input type="checkbox" class="custom-control-input" id="color-3">
-                <label class="custom-control-label" for="color-3">Red</label>
-                <span class="badge border font-weight-normal">246</span>
-            </div>
-            <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                <input type="checkbox" class="custom-control-input" id="color-4">
-                <label class="custom-control-label" for="color-4">Blue</label>
-                <span class="badge border font-weight-normal">145</span>
-            </div>
-            <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
-                <input type="checkbox" class="custom-control-input" id="color-5">
-                <label class="custom-control-label" for="color-5">Green</label>
-                <span class="badge border font-weight-normal">168</span>
-            </div>
+            {% for color in colours %}
+                <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                    <input type="checkbox" class="custom-control-input" id="color-{{ color }}" name="color" value="{{ color }}"
+                    {% if color in selected_colors %} checked {% endif %}>
+                    <label class="custom-control-label" for="color-{{ color }}">{{ color }}</label>
+                    <!-- You may display additional information like stock count if needed -->
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary">Apply</button>
         </form>
     </div>
+ 
     <!-- Color End -->
+    <!-- Filter by Brand -->
+    <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by Brand</span></h5>
+        <div class="bg-light p-4 mb-3">
+            <form method="get" action="{% url 'shop' %}">
+                {% for brand in brands %}
+                <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                    <input type="checkbox" class="custom-control-input" id="brand-{{ brand.id }}" name="brand" value="{{ brand.id }}"
+                    {% if brand.id in selected_brands %} checked {% endif %}>
+                    <label class="custom-control-label" for="brand-{{ brand.id }}">{{ brand.brand_name }}</label>
+                    <span class="badge border font-weight-normal">{{ brand.product_count }}</span>
+                </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-primary">Apply Filter</button>
+            </form>
+        </div>
 
-    <!-- Size Start -->
-    <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by size</span></h5>
-    <div class="bg-light p-4 mb-30">
-        <form>
-            <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                <input type="checkbox" class="custom-control-input" checked id="size-all">
-                <label class="custom-control-label" for="size-all">All Size</label>
-                <span class="badge border font-weight-normal">1000</span>
-            </div>
-            <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                <input type="checkbox" class="custom-control-input" id="size-1">
-                <label class="custom-control-label" for="size-1">XS</label>
-                <span class="badge border font-weight-normal">150</span>
-            </div>
-            <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                <input type="checkbox" class="custom-control-input" id="size-2">
-                <label class="custom-control-label" for="size-2">S</label>
-                <span class="badge border font-weight-normal">295</span>
-            </div>
-            <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                <input type="checkbox" class="custom-control-input" id="size-3">
-                <label class="custom-control-label" for="size-3">M</label>
-                <span class="badge border font-weight-normal">246</span>
-            </div>
-            <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                <input type="checkbox" class="custom-control-input" id="size-4">
-                <label class="custom-control-label" for="size-4">L</label>
-                <span class="badge border font-weight-normal">145</span>
-            </div>
-            <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
-                <input type="checkbox" class="custom-control-input" id="size-5">
-                <label class="custom-control-label" for="size-5">XL</label>
-                <span class="badge border font-weight-normal">168</span>
-            </div>
-        </form>
-    </div>
-    <!-- Size End -->
-</div>
+
+
+  
 <!-- Shop Sidebar End -->
 
-{% comment %} <!-- Filter by Price -->
-<h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by price</span></h5>
-<div class="bg-light p-4 mb-3">
-    <form method="get" action="{% url 'product_filter' %}">
-        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-            <input type="checkbox" class="custom-control-input" id="price-all" name="price_all" {% if not request.GET.price_all %}checked{% endif %}>
-            <label class="custom-control-label" for="price-all">All Price</label>
-            <span class="badge border font-weight-normal">1000</span>
-        </div>
-        <!-- Add dynamic price range checkboxes based on your data -->
-        {% for price_range in price_ranges %}
-        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-            <input type="checkbox" class="custom-control-input" id="price-{{ price_range.id }}" name="price_range" value="{{ price_range.id }}" {% if request.GET.price_range == price_range.id %}checked{% endif %}>
-            <label class="custom-control-label" for="price-{{ price_range.id }}">{{ price_range.range_start }} - {{ price_range.range_end }}</label>
-            <span class="badge border font-weight-normal">{{ price_range.product_count }}</span>
-        </div>
-        {% endfor %}
-        <button type="submit" class="btn btn-primary">Apply Filter</button>
-    </form>
-</div>
 
-<!-- Filter by Category -->
-<h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by category</span></h5>
-<div class="bg-light p-4 mb-3">
-    <form method="get" action="{% url 'product_filter' %}">
-        <!-- Add dynamic category checkboxes based on your data -->
-        {% for category in categories %}
-        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-            <input type="checkbox" class="custom-control-input" id="category-{{ category.id }}" name="category" value="{{ category.id }}" {% if request.GET.category == category.id %}checked{% endif %}>
-            <label class="custom-control-label" for="category-{{ category.id }}">{{ category.category_name }}</label>
-            <span class="badge border font-weight-normal">{{ category.product_count }}</span>
-        </div>
-        {% endfor %}
-        <button type="submit" class="btn btn-primary">Apply Filter</button>
-    </form>
-</div>
-
-<!-- Filter by Subcategory -->
-<h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by Subcategory</span></h5>
-<div class="bg-light p-4 mb-3">
-    <form method="get" action="{% url 'product_filter' %}">
-        <!-- Add dynamic category checkboxes based on your data -->
-        {% for sub_category in sub_categories %}
-        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-            <input type="checkbox" class="custom-control-input" id="sub_category-{{ sub_category.id }}" name="sub_category" value="{{ sub_category.id }}" {% if request.GET.sub_category == sub_category.id %}checked{% endif %}>
-            <label class="custom-control-label" for="sub_category-{{ sub_category.id }}">{{ sub_category.sub_category_name }}</label>
-            <span class="badge border font-weight-normal">{{ sub_category.product_count }}</span>
-        </div>
-        {% endfor %}
-        <button type="submit" class="btn btn-primary">Apply Filter</button>
-    </form>
-</div>
-
-<!-- Filter by Brand -->
-
-<h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by Brand</span></h5>
-<div class="bg-light p-4 mb-3">
-    <form method="get" action="{% url 'product_filter' %}">
-        <!-- Add dynamic category checkboxes based on your data -->
-        {% for brand in brands %}
-        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-            <input type="checkbox" class="custom-control-input" id="brand-{{ brand.id }}" name="brand" value="{{ brand.id }}" {% if request.GET.brand == brand.id %}checked{% endif %}>
-            <label class="custom-control-label" for="brand-{{ brand.id }}">{{ brand.brand_name }}</label>
-            <span class="badge border font-weight-normal">{{ brand.product_count }}</span>
-        </div>
-        {% endfor %}
-        <button type="submit" class="btn btn-primary">Apply Filter</button>
-    </form>
-</div>
-
-<!-- Filter by Colour -->
-
-<h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by Colour</span></h5>
-<div class="bg-light p-4 mb-3">
-    <form method="get" action="{% url 'product_filter' %}">
-        <!-- Add dynamic category checkboxes based on your data -->
-        {% for colour in colours %}
-        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-            <input type="checkbox" class="custom-control-input" id="colour-{{ colour.id }}" name="colour" value="{{ colour.id }}" {% if request.GET.colour == colour.id %}checked{% endif %}>
-            <label class="custom-control-label" for="colour-{{ colour.id }}">{{ colour.colour_name }}</label>
-            <span class="badge border font-weight-normal">{{ colour.product_count }}</span>
-        </div>
-        {% endfor %}
-        <button type="submit" class="btn btn-primary">Apply Filter</button>
-    </form>
-</div>
-
-<!-- Filter by Size-->
-
-<h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by Size</span></h5>
-<div class="bg-light p-4 mb-3">
-    <form method="get" action="{% url 'product_filter' %}">
-        <!-- Add dynamic category checkboxes based on your data -->
-        {% for size in sizes %}
-        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-            <input type="checkbox" class="custom-control-input" id="size-{{ size.id }}" name="size" value="{{ size.id }}" {% if request.GET.size == size.id %}checked{% endif %}>
-            <label class="custom-control-label" for="size-{{ size.id }}">{{ size.size_name }}</label>
-            <span class="badge border font-weight-normal">{{ size.product_count }}</span>
-        </div>
-        {% endfor %}
-        <button type="submit" class="btn btn-primary">Apply Filter</button>
-    </form>
-</div> {% endcomment %}

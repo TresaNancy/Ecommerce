@@ -1,0 +1,117 @@
+
+
+ {% extends 'base.html' %}
+{% load static %}
+{% block content%}
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<head>
+  {% comment %} <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> {% endcomment %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* Custom CSS styling */
+    body {
+      background-color: #f8f9fa !important; /* Light gray background */
+    }
+    .user-page {
+      margin: 0;
+      padding: 20px;
+      background-color: #ffffff; /* White background */
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    }
+    .blue-icon {
+      color: blue; /* Set the color to blue */
+      font-size: 50px;
+    }
+    .user-box-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px; /* Space between boxes */
+      margin-top: 20px;
+    }
+    .user-box {
+      flex: 0 1 calc(50% - 20px); /* Two boxes in a row with 20px spacing */
+      text-align: center;
+      padding: 20px;
+      border: 1px solid #e0e0e0;
+      border-radius: 5px;
+      background-color: #ffffff; /* White background */
+      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s;
+    }
+    .user-box:hover {
+      transform: scale(1.05);
+    }
+    .account-settings {
+      font-size: 20px;
+      margin-top: 20px;
+    }
+    .settings-list {
+      list-style-type: none;
+      padding: 0;
+    }
+    .settings-list-item {
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container user-page">
+    <p class="user-greeting">Hey! {{request.user.first_name}}</p>
+    
+    <div class="user-box-container">
+      <a href="orders_page_url">
+        <div class="user-box">
+          <i class="fas fa-shopping-cart blue-icon"></i>
+          <p>Orders</p>
+        </div>
+      </a>
+      <a href="wishlist_page_url">
+        <div class="user-box">
+          <i class="fas fa-heart blue-icon"></i>
+          <p>Wishlist</p>
+        </div>
+      </a>
+      <a href="wallet_page_url">
+        <div class="user-box">
+          <i class="fas fa-wallet blue-icon"></i>
+          <p>Wallet</p>
+        </div>
+      </a>
+      <a href="coupons_page_url">
+        <div class="user-box">
+          <i class="fas fa-tags blue-icon"></i>
+          <p>Coupons</p>
+        </div>
+      </a>
+    </div>
+    
+    <p class="account-settings">Account Settings:</p>
+    <ul class="settings-list">
+      <a href={% url 'user_profile' %}>
+        <li class="settings-list-item">
+          <i class="fas fa-user-edit blue-icon"></i> User Profile
+        </li>
+      </a>
+      <a href="saved_addresses_page_url">
+        <li class="settings-list-item">
+          <i class="fas fa-address-book blue-icon"></i> Saved Addresses
+        </li>
+      </a>
+    </ul>
+    <form method="post" action="{% url 'user_logout' %}">
+      {% csrf_token %}
+      <button class="logout-button" type="submit">Logout</button>
+    </form>
+  </div>
+</body>
+
+{% endblock %} 

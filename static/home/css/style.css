@@ -152,7 +152,7 @@ sup {
 }
 
 a {
-  color: white;
+  color: grey;
   text-decoration: none;
   background-color:transparent;
 }
@@ -2365,8 +2365,8 @@ fieldset:disabled a.btn {
 
 .btn-primary {
   color: #212529;
-  background-color:#0F52BA;
-  border-color:navy;
+  background-color:#FFD700 	;
+  border-color:white;
 }
 
 .btn-primary:hover {
@@ -6165,7 +6165,7 @@ button.bg-light:focus {
 }
 
 .bg-dark {
-  background-color:#0F52BA;
+  background-color:#2874f0;
 }
 
 a.bg-dark:hover, a.bg-dark:focus,

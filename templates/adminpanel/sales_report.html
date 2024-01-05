@@ -1,0 +1,129 @@
+{% extends 'adminpanel_base.html' %}
+{% load static %}
+
+{% block content %} 
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <a href="{% url 'sales_report' %}"><h2 class="mb-4" style="color:#292fa2">Sales Report</h2></a>
+            <button class="btn btn-primary" id="pdfButton">Export as PDF</button>
+            <button class="btn btn-success" id="excelButton">Export as Excel</button>
+            <p class="mt-2">Total entities: {{ sales_report|length }}</p>
+
+        </div>
+        <div class="col-md-4">
+            <form action="{% url 'sales_report' %}" method="post">{% csrf_token %}
+                <div class="form-group align-items-center">
+                    <p class="mb-1 mt-2" style="margin-left: 130px; color:#241aaa">ENTER DATE RANGE</p>
+                    <div class="form-group">
+                        <label for="start_date">Start Date</label>
+                        <input type="date" class="form-control" id="start_date" name="start_date" aria-describedby="emailHelp" placeholder="Enter email">
+                    </div>
+                    <div class="form-group mt-2">
+                        <label for="end_date">End Date</label>
+                        <input type="date" class="form-control" id="end_date" name="end_date" placeholder="Password">
+                    </div>
+                    
+
+                <button type="submit" class="btn btn-primary mt-2" style="margin-left: 200px">Submit</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+    
+    <div class="table-responsive">
+        <table class="table table-striped" id="salesTable">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>User name</th>
+                    <th>Order Date</th>
+                    <th>Status</th>
+                    <th>Payment Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in sales_report %}
+                    <tr>
+                        <td>{{ order.id }}</td>
+                        <td>{{ order.user.name }}</td>
+                        <td>{{ order.created_at }}</td>
+                        <td>{{ order.status }}</td>
+                        <td>₹{{ order.total_amount }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+
+
+<script>
+
+    document.getElementById('searchButton').addEventListener('click', function() {
+        var searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+        var rows = document.querySelectorAll('#salesTable tbody tr');
+        rows.forEach(function(row) {
+            var orderId = row.querySelector('td:first-child').textContent.trim().toLowerCase();
+            if (orderId.includes(searchTerm)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+
+    document.getElementById('clearButton').addEventListener('click', function() {
+        document.getElementById('searchInput').value = '';
+        var rows = document.querySelectorAll('#salesTable tbody tr');
+        rows.forEach(function(row) {
+            row.style.display = '';
+        });
+    });
+    
+   
+</script>
+<script>
+    document.getElementById('pdfButton').addEventListener('click', function() {
+        var salesTable = document.getElementById('salesTable');
+        var opt = {
+            margin: 10,
+            filename: 'sales_report.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        // Create a new instance of html2pdf and provide the element to be converted
+        html2pdf().from(salesTable).set(opt).save();
+    });
+</script>
+<script>
+    document.getElementById('excelButton').addEventListener('click', function() {
+        var salesTable = document.getElementById('salesTable');
+        var workbook = XLSX.utils.table_to_book(salesTable);
+        var excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+
+        // Convert the array buffer to a Blob
+        var blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        
+        // Create a download link
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'sales_report.xlsx';
+        a.click();
+    });
+</script>
+
+
+
+
+{% endblock %}

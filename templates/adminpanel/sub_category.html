@@ -1,0 +1,122 @@
+{% extends 'adminpanel_base.html' %}
+{% load static %}
+{% block content%}
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+
+
+        
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Sub Categories </h2>
+            <p>Add, edit, or delete a sub-category</p>
+        </div>
+        <div>
+            <input type="text" placeholder="Search Sub-Categories" class="form-control bg-white">
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <form method="post" action="{% url 'add_sub_category' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="create_sub_category" value="true">
+                        <div class="mb-4">
+                            <label for="sub_category_name" class="form-label">Sub-Category Name</label>
+                            <input type="text" placeholder="Type here" class="form-control" id="sub_category_name" name="sub_category_name" />
+                        </div>
+                        <div class="mb-4">
+                            <label for="sub_category_title" class="form-label">Sub-Category Title</label>
+                            <input type="text" placeholder="Type here" class="form-control" id="sub_category_title" name="sub_category_title"/>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Description</label>
+                            <textarea placeholder="Type here" class="form-control" name="sub_category_description"></textarea>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Category:</label>
+                            
+                            <select class="form-control" id="category" name="category">
+                                
+                            <option value="">Select a Category</option>
+                            {% for category in categories %}
+                                <option value="{{ category.id }}">{{ category.category_name }}</option>
+                            {% endfor %}
+                            </select>
+                        
+                        </div>  
+                        
+                        {% comment %} <div class="mb-4">
+                            <label class="form-label">Category:</label>
+                            <select class="form-control" id="category" name="category">
+                                <option value="">Select</option>
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}">{{ category.category_name}}</option>
+                                {% endfor %}
+                            
+                            </select>
+                        </div>  {% endcomment %}
+                        <div class="d-grid">
+                        <button class="btn btn-primary" type="submit">Create Sub-category</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-9">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" />
+                                        </div>
+                                    </th>
+                                    <th>Name</th>
+                                    <th>Title</th>
+                                    <th>Description</th>
+                                    
+                                    <th>Edit</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                                {% for sub_category in sub_categories %}
+                                <form method="post" action="{% url 'edit_sub_category' %}">
+                                    {% csrf_token %}
+                                    
+                                    <tr>
+                                        <td class="text-center">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="" />
+                                            </div>
+                                           
+                                        </td>
+                                        <td><input type="text" name="sub_category_name" value="{{ sub_category.sub_category_name }}"></td>
+                                        <td><input type="text" name="sub_category_description" value="{{ sub_category.sub_category_description }}"></td>
+                                        <td><textarea name="sub_category_title"> {{ sub_category.sub_category_title }}</textarea></td>
+                                        {% comment %} <td><textarea name="category"> {{ sub_category.category}}</textarea></td> {% endcomment %}
+                                        <td><button type="submit" name="edit_sub_category" value="{{ sub_category.id }}" class="btn btn-light rounded btn-sm font-sm"> <i class="fas fa-pencil-alt"></i> </button></td>
+                                        <td><button type="submit" name="delete_sub_category" value="{{ sub_category.id }}" class="dropdown-item text-danger">Delete</button></td>
+                                        
+                                    </tr>
+                                    {% endfor %}
+                                </form> 
+                            </tbody>
+                        </table>
+                    </div>
+                </div> <!-- .col// -->
+            </div> <!-- .row // -->
+        </div> <!-- card body .// -->
+    </div> <!-- card .// -->
+</section> <!-- content-main end// -->
+{% endblock %}
+

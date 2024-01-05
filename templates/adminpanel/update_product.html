@@ -1,0 +1,146 @@
+{% extends 'adminpanel_base.html' %}
+{% load static %}
+{% block content%}
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+
+        <section class="content-main">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="content-header">
+                            <form method="POST" action="{% url 'update_product' products.id %}" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <h2 class="content-title">Edit Product</h2>
+                                            <div>
+                                                {% comment %} <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Save to draft</button> {% endcomment %}
+                                                <button type="submit" class="btn btn-md rounded font-sm hover-up">Publish</button>
+                                            </div>
+                                        
+                                    </div>
+                                    <div class="card mb-4">
+                                        <div class="card-header">
+                                            <h4>Edit Products</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="mb-4">
+                                                <label for="product_title" class="form-label">Product title</label>
+                                                <input type="text" class="form-control" id="product_title" name="product_title" value="{{ products.product_title }}"required>
+                                            </div>
+                                            <div class="mb-4">
+                                                <label class="form-label">Product description</label>
+                                                <input type="text" class="form-control" id="product_description" name="product_description" value ="{{products.product_description}}">
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="mb-4">
+                                                        <label class="form-label">Product-Code</label>
+                                                        <input type="text" class="form-control" id="product_code" name="product_code" value="{{products.product_code}}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="mb-4">
+                                                        <label class="form-label">Regular price</label>
+                                                        <input type="text" class="form-control" id="regular_price" name="regular_price" value="{{products.regular_price}}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="mb-4">
+                                                        <label class="form-label">Quantity</label>
+                                                        <input type="text" class="form-control" id="quantity" name="quantity" value="{{products.quantity}}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="mb-4">
+                                                        <label for="size" class="form-label">Size</label>
+                                                       
+                                                        
+                                                         <select class="form-control" id="regular_size" name="size" name="{{products.size}}">
+                                                            <option value="{{size.id}}">Select a Size</option>
+                                                            {% for size in sizes %}
+                                                            {% comment %} <option value="{{ category.id }}" {% if category.id == product.category.id %}selected{% endif %}>{{ category.category_name }}</option> {% endcomment %}
+                                                                <option value="{{size.id}}" {% if size.id == products.size.id %}selected{% endif %}>{{ size.regular_size }}</option>
+                                                            {% endfor %}
+                                                        </select> 
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="mb-4">
+                                                        <label for="brand" class="form-label">Brand</label>
+                                                        <select class="form-control" id="brand" name="brand">
+                                                            <option value="{{ products.brand}}">Select a Brand</option>
+                                                            {% for brand in brands %}
+                                                                <option value="{{brand.id}}" {% if brand.id == products.brand_name.id %}selected{% endif %}>{{ brand.brand_name }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="mb-4">
+                                                        <label for="product_colour" class="form-label">Colour</label>
+                                                        <select class="form-control" id="product_colour" name="product_colour">
+                                                            <option value={{products.colour}}>Select a Colour</option>
+                                                            {% for colour in colours %}
+                                                                <option value="{{colour.id }}" {% if colour.id == products.colour.id %}selected{% endif %}>{{ colour.product_colour }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> <!-- card end// -->
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card mb-4 mt-3">
+                                        <div class="card-header">
+                                            <h4>Product Image</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="input-upload">
+                                                <img src="{{products.product_image.ur}}" alt="">
+                                                <input class="form-control" type="file" name="product_image" value="{{product_image.id}}" {% if product_image.id == products.product_image.id %}selected{% endif %} required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header">
+                                        <div class="row gx-2">
+                                            <div class="col-sm-6 mb-3">
+                                                <label class="form-label">Category</label>
+                                                <select class="form-control" id="category" name="category">
+                                                    <option value="{{ products.category }}">Select</option>
+                                                    {% for category in categories %}
+                                                        <option value="{{category.id}}" {% if category.id == products.category.id %}selected{% endif %}>{{ category.category_name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header">
+                                        <div class="row gx-2">
+                                            <div class="col-sm-6 mb-3">
+                                                <label class="form-label">Sub Category</label>
+                                                <select class="form-control" id="sub_category" name="sub_category">
+                                                    <option value="{{ products.sub_category}}">Select</option>
+                                                    {% for sub_category in sub_categories %}
+                                                        <option value="{{sub_category.id}}" {% if sub_category.id == products.sub_category.id %}selected{% endif %}>{{ sub_category.sub_category_name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                            </form>
+                            </div>
+                        </div> <!-- row.// -->
+                    </div>
+                </div> <!-- card end// -->
+            </div>
+        </section>
+        
+       {% endblock%} 
+        

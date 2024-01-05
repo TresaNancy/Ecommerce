@@ -1,163 +1,126 @@
-
+{% extends 'adminpanel_base.html' %} 
 {% load static %}
+{% block title %}Order Category Graph {%endblock title%}
+
+
 {% block content %}
+<!-- Include necessary CSS/JS libraries for charting (e.g., Chart.js) -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+    /* Add any custom styles here */
+</style>
+<head>
+    <title>Order Category Graph</title>
+    <!-- Include necessary CSS/JS libraries for charting (e.g., Chart.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Add any custom styles here */
+    </style>
+</head>
 <body>
-    <link href="{% static 'adminpanel/css/main.css' %}" rel="stylesheet" type="text/css" />
-    <div class="screen-overlay"></div>
-    <aside class="navbar-aside" id="offcanvas_aside">
-        <div class="aside-top">
-            <a href="{% url 'dashboard' %}" class="brand-wrap">
-                <img src="{% static 'adminpanel/imgs/themes/logo.svg' %}" class="logo" alt="Explore Junction Dashboard">
-            </a>
-            <div>
-                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
+    <h1 class="text-center mt-4">Order Category Graph</h1>
+
+    <form class="text-center mb-4" method="get">
+        <label class="me-2">Choose Interval:</label>
+        <input type="radio" name="interval" value="monthly" class="me-1" {% if interval == 'monthly' %}checked{% endif %}> Monthly
+        <input type="radio" name="interval" value="yearly" class="me-1" {% if interval == 'yearly' %}checked{% endif %}> Yearly
+        <input type="radio" name="interval" value="weekly" class="me-1" {% if interval == 'weekly' %}checked{% endif %}> Weekly
+        <button type="submit" class="btn btn-primary">Apply</button>
+    </form>
+    
+    <!-- Include a placeholder for the chart -->
+    <div class="container">
+        <div class="row">
+            <!-- Include a placeholder for the bar chart -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Bar Chart</h2>
+                        <canvas id="orderCategoryChart" width="100" height="100"></canvas>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Include a placeholder for the pie chart -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Pie Chart</h2>
+                        <canvas id="orderCategoryPieChart" width="100" height="100"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
-        <nav>
-            <ul class="menu-aside">
-                <li class="menu-item active">
-                    <a class="menu-link" href="{% url 'dashboard' %}"> <i class="icon material-icons md-home"></i>
-                        <span class="text">Dashboard</span>
-                    </a>
-                </li>
-                <li class="menu-item has-submenu">
-                    <a class="menu-link" href="{% url 'products_list' %}"> <i class="icon material-icons md-shopping_bag"></i>
-                        <span class="text">Products</span>
-                    </a>
-                    <div class="submenu">
-                        <a href="{% url 'products_list' %}">Product List</a>
-                        <a href="{% url 'products_grid' %}">Product grid</a>
-                        <a href="{% url 'products_grid_2' %}">Product grid 2</a>
-                        <a href="{% url 'categories' %}">Categories</a>
-                    </div>
-                </li>
-                <li class="menu-item has-submenu">
-                    <a class="menu-link" href="{% url 'orders_1' %}"> <i class="icon material-icons md-shopping_cart"></i>
-                        <span class="text">Orders</span>
-                    </a>
-                    <div class="submenu">
-                        <a href="{% url 'orders_1' %}">Order list 1</a>
-                        <a href="{% url 'orders_2' %}">Order list 2</a>
-                        <a href="{% url 'orders_detail' %}">Order detail</a>
-                    </div>
-                </li>
-                <li class="menu-item has-submenu">
-                    <a class="menu-link" href="{% url 'sellers_cards' %}"> <i class="icon material-icons md-store"></i>
-                        <span class="text">Sellers</span>
-                    </a>
-                    <div class="submenu">
-                        <a href="{% url 'sellers_cards' %}">Sellers cards</a>
-                        <a href="{% url 'sellers_list' %}">Sellers list</a>
-                        <a href="{% url 'seller_detail' %}">Seller profile</a>
-                    </div>
-                </li>
-                <li class="menu-item has-submenu">
-                    <a class="menu-link" href="{% url 'add_product' %}"> <i class="icon material-icons md-add_box"></i>
-                        <span class="text">Add product</span>
-                    </a>
-                    <div class="submenu">
-                        <a href="{% url 'add_product' %}">Add product 1</a>
-                        <a href="{% url 'form_product_2' %}">Add product 2</a>
-                        <a href="{% url 'form_product_3' %}">Add product 3</a>
-                        <a href="{% url 'form_product_4' %}">Add product 4</a>
-                    </div>
-                </li>
-                <li class="menu-item has-submenu">
-                    <a class="menu-link" href="{% url 'transactions_1' %}"> <i class="icon material-icons md-monetization_on"></i>
-                        <span class="text">Transactions</span>
-                    </a>
-                    <div class="submenu">
-                        <a href="{% url 'transactions_1' %}">Transaction 1</a>
-                        <a href="{% url 'transactions_2' %}">Transaction 2</a>
-                    </div>
-                </li>
+    </div>
+        
+    <!-- Rest of your JavaScript code for generating the charts -->
+    <script>
+        // JavaScript code to generate the chart using data_dict
+        // You can use libraries like Chart.js to create the chart
+        var dataFromDjango = JSON.parse('{{ data_dict_json|safe }}');
 
-                <li class="menu-item">
-                    <a class="menu-link" href="{% url 'reviews' %}"> <i class="icon material-icons md-comment"></i>
-                        <span class="text">Reviews</span>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a class="menu-link" href="{% url 'brands' %}"> <i class="icon material-icons md-stars"></i>
-                        <span class="text">Brands</span> </a>
-                </li>
-                <li class="menu-item">
-                    <a class="menu-link" disabled href="#"> <i class="icon material-icons md-pie_chart"></i>
-                        <span class="text">Statistics</span>
-                    </a>
-                </li>
-            </ul>
-            <hr>
-            <ul class="menu-aside">
-                <li class="menu-item has-submenu">
-                    <a class="menu-link" href="#"> <i class="icon material-icons md-settings"></i>
-                        <span class="text">Settings</span>
-                    </a>
-                    <div class="submenu">
-                        <a href="{% url 'settings_1' %}">Setting sample 1</a>
-                        <a href="{% url 'settings_2' %}">Setting sample 2</a>
-                    </div>
-                </li>
-            </ul>
-            <br>
-            <br>
-        </nav>
-    </aside>
-    <main class="main-wrap">
-        <header class="main-header navbar">
-            <div class="col-search">
-                <form class="searchform">
-                    <div class="input-group">
-                        <input list="search_terms" type="text" class="form-control" placeholder="Search term">
-                        <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
-                    </div>
-                    <datalist id="search_terms">
-                        <option value="Products">
-                        <option value="New orders">
-                        <option value="Apple iphone">
-                        <option value="Ahmed Hassan">
-                    </datalist>
-                </form>
-            </div>
-            <div class="col-nav">
-                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="material-icons md-apps"></i> </button>
-                <ul class="nav">
-                    <li class="nav-item">
-                        <a class="nav-link btn-icon" href="#">
-                            <i class="material-icons md-notifications animation-shake"></i>
-                            <span class="badge rounded-pill">3</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
-                    </li>
-                    <li class="dropdown nav-item">
-                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownLanguage" aria-expanded="false"><i class="material-icons md-public"></i></a>
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownLanguage">
-                            <a class="dropdown-item text-brand" href="#"><img src="{% static 'adminpanel/imgs/theme/flag-us.png' %}" alt="English">English</a>
-                            <a class="dropdown-item" href="#"><img src="{% static 'adminpanel/imgs/theme/flag-fr.png' %}" alt="Français">Français</a>
-                            <a class="dropdown-item" href="#"><img src="{% static 'adminpanel/imgs/theme/flag-jp.png' %}" alt="Français">日本語</a>
-                            <a class="dropdown-item" href="#"><img src="{% static 'adminpanel/imgs/theme/flag-cn.png' %}" alt="Français">中国人</a>
-                        </div>
-                    </li>
-                    <li class="dropdown nav-item">
-                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="{% static 'adminpanel/imgs/people/avatar2.jpg' %}" alt="User"></a>
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
-                            <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item text-danger" href="{% url 'user_logout' %}"><i class="material-icons md-exit_to_app"></i>Logout</a>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </header>
+var months = Object.keys(dataFromDjango);
+var categories = Array.from(new Set(Object.values(dataFromDjango).flatMap(Object.keys)));
+
+var data = {
+    labels: months,
+    datasets: categories.map(function(category) {
+        return {
+            label: category,
+            data: months.map(function(month) {
+                return dataFromDjango[month][category] || 0;
+            }),
+            borderWidth: 1
+        };
+    })
+};
+
+var ctx = document.getElementById('orderCategoryChart').getContext('2d');
+var chart = new Chart(ctx, {
+    type: 'bar',
+    data: data,
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+ // JavaScript code to generate the pie chart using data_dict_json
+ var pieChartData = {
+    labels: categories,
+    datasets: [{
+        data: categories.map(function(category) {
+            return months.reduce(function(sum, month) {
+                return sum + (dataFromDjango[month][category] || 0);
+            }, 0);
+        }),
+        backgroundColor: categories.map(function(category) {
+            return getRandomColor();
+        })
+    }]
+};
+
+var ctxPie = document.getElementById('orderCategoryPieChart').getContext('2d');
+var pieChart = new Chart(ctxPie, {
+    type: 'pie',
+    data: pieChartData
+});
+
+// Function to generate random colors for pie chart
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+    </script>
+{%endblock%}
+
+{% comment %}    
         <section class="content-main">
             <div class="content-header">
                 <div>
@@ -650,6 +613,5 @@
     <script src="{% static 'adminpanel/js/main.js' %}" type="text/javascript"></script>
     <script src="{% static 'adminpanel/js/custom-chart.js' %}" type="text/javascript"></script>
 </body>
+  {% endcomment %}
 
-
-{%endblock%}

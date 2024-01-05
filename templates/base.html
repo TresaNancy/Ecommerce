@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     {% block title%}
     <title>Explore Junction</title>
-    {% endblock%} 
+    {% endblock title%} 
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="Free HTML Templates" name="keywords">
     <meta content="Free HTML Templates" name="description">
@@ -37,4 +37,9 @@
 {% block content%}
 {% endblock %}
 
-{% include "includes/footer.html" %}
+{% block footer %}
+
+    {% include "includes/footer.html" %}
+{%endblock footer%}
+</body>
+</html>

@@ -1,0 +1,108 @@
+{% extends 'adminpanel_base.html' %}
+{% load static %}
+{% block content%}
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+
+
+        
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Categories </h2>
+            <p>Add, edit, or delete a category</p>
+        </div>
+        <div>
+            <input type="text" placeholder="Search Categories" class="form-control bg-white">
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <form method="post" action="{% url 'edit_category' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="hidden" name="add_category" value="true">
+                        <div class="mb-4">
+                            <label for="category_name" class="form-label">Category Name</label>
+                            <input type="text" placeholder="{{category.category_name}}" class="form-control" id="category_name" name="category_name" />
+                        </div>
+                        <div class="mb-4">
+                            <label for="category_title" class="form-label">Category Title</label>
+                            <input type="text" placeholder="{{category.category_title}}" class="form-control" id="category_title" name="category_title"/>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Description</label>
+                            <textarea placeholder="{{category.description}}" class="form-control" name="description"></textarea>
+                        </div>
+                        <div class="card mb-4 mt-3">
+                            <div class="card-header">
+                                <h4>Product Image</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="input-upload">
+                                    <img src="{{category.category_image}}" alt="">
+                                    <input class="form-control" type="file" name="category_image" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-grid">
+                            <button class="btn btn-primary" type="submit">Update category</button>
+                        </div>
+                    </form>
+                {% comment %} </div>
+                <div class="col-md-9">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" />
+                                        </div>
+                                    </th>
+                                    <th>Name</th>
+                                    <th>Title</th>
+                                    <th>Description</th>
+                                    
+                                    <th>Edit</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                                {% for category in categories %}
+                                <form method="post" action="{% url 'edit_category' %}">
+                                    {% csrf_token %}
+                                    
+                                    <tr>
+                                        <td class="text-center">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="" />
+                                            </div>
+                                        </td>
+                                        <td><input type="text" name="category_name" value="{{ category.category_name }}"></td>
+                                        <td><input type="text" name="category_title" value="{{ category.category_title }}"></td>
+                                        <td><textarea name="description">{{ category.description }}</textarea></td>
+                                        <td><button type="submit" name="edit_category" value="{{ category.id }}" class="btn btn-light rounded btn-sm font-sm"> <i class="fas fa-pencil-alt"></i> </button></td>
+                                        <td><button type="submit" name="delete_category" value="{{ category.id }}" class="dropdown-item text-danger">Delete</button></td>
+                                        
+                                    </tr>
+                                    {% endfor %}
+                                </form> 
+                            </tbody>
+                        </table>
+                    </div>
+                </div> <!-- .col// --> {% endcomment %}
+            </div> <!-- .row // -->
+        </div> <!-- card body .// -->
+    </div> <!-- card .// -->
+</section> <!-- content-main end// -->
+{% endblock %}
+

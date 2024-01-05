@@ -12,6 +12,13 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path,os
 
+from decouple import config
+
+SECRET_KEY = config('SECRET_KEY')
+RAZORPAY_KEY_ID = config('RAZORPAY_KEY_ID')
+RAZORPAY_KEY_SECRET = config('RAZORPAY_KEY_SECRET')
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -40,7 +47,9 @@ INSTALLED_APPS = [
     'home',
     'adminpanel',
     'authentication',
-    
+    'cart',
+    'user',
+    'orders'
 ]
 
 MIDDLEWARE = [
@@ -80,7 +89,7 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'website',
+        'NAME': 'explore',
         'USER': 'postgres',
         'PASSWORD': '1234',
         'HOST': 'localhost',
@@ -143,11 +152,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
-
-TWILIO_ACCOUNT_SID = "AC7cf7ea3b727144be8313f6fcc4339527"
-TWILIO_AUTH_TOKEN = "4fce8474cfb808a1627530a1af25e8ae"
-TWILIO_VERIFY_SERVICE_SID = os.environ.get('VA523ba66ce0d2a1b654cb321d67b71a6d')
-TWILIO_PHONE_NUMBER = "+917907516176"
 
 
 # Email Backend

@@ -30,8 +30,8 @@
                         </div>
                         {% endfor %}
         <h2 class="text-center">OTP Verification</h2>
-        <p class="text-center">Please enter the OTP sent to your registered email/ph number.</p>
-        <form method="post" action="{% url 'otp_verification' %}">
+        <p class="text-center">Please enter the OTP sent to your registered ph number.</p>
+        <form method="POST" action="{% url 'otp_verification' phone %}">
             {% csrf_token %}
             <div class="form-group">
                 <label for="otp">Enter OTP:</label>

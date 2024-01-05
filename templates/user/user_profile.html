@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<body>
+    {% block content %}
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+  <div class="container user-profile">
+    <h2>User Profile</h2>
+    <form method="post" action="{% url 'update_profile' %}">
+        {% csrf_token %} <!-- Include a CSRF token for form security -->
+    
+      <div class="form-group">
+        <label for="username">User Name</label>
+        <div class="input-group">
+          <input type="text" class="form-control" id="username" name="first_name" value="{{request.user.first_name}}" >
+          <div class="input-group-append">
+            <span class="input-group-text edit-icon" data-field="username">
+              <i class="fas fa-pencil-alt"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for "email">Email:</label>
+        <div class="input-group">
+          <input type="email" class="form-control" id="email" name="email" value="{{request.user.email}}" >
+          <div class="input-group-append">
+            <span class="input-group-text edit-icon" data-field="email">
+              <i class="fas fa-pencil-alt"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="phone">Phone:</label>
+        <div class="input-group">
+          <input type="text" class="form-control" id="phone" name="phone" value="{{request.user.phone}}" >
+          <div class="input-group-append">
+            <span class="input-group-text edit-icon" data-field="phone">
+              <i class="fas fa-pencil-alt"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+      
+      <button type="submit" class="btn btn-primary" id="save-button" style="display: none;">Save Changes</button>
+    </form>
+  </div>
+  
+  <div class="container user-profile">
+    <h2>Saved Address</h2>
+<script>
+  // JavaScript to handle edit functionality
+document.addEventListener("DOMContentLoaded", function () {
+  const editIcons = document.querySelectorAll(".edit-icon");
+  const saveButton = document.getElementById("save-button");
+  const fields = {};
+
+  editIcons.forEach((editIcon) => {
+    editIcon.addEventListener("click", function () {
+      const field = this.dataset.field;
+      const inputField = document.getElementById(field);
+      inputField.removeAttribute("readonly"); // Change from 'disabled' to 'readonly'
+      inputField.classList.add("editable-field");
+      fields[field] = inputField.value;
+      saveButton.style.display = "block";
+    });
+  });
+
+  saveButton.addEventListener("click", function () {
+    const data = {};
+    for (const field in fields) {
+      const inputField = document.getElementById(field);
+      if (inputField.value !== fields[field]) {
+        data[field] = inputField.value;
+      }
+      inputField.setAttribute("readonly", "readonly"); // Change from 'disabled' to 'readonly'
+    }
+    // Send the data to the server to update the user's information
+    // You'll need to make an AJAX request or submit a form to your Django view to update the database.
+    // Example: You can use the fetch API to send a POST request to a Django view.
+
+    saveButton.style.display = "none";
+  });
+});
+</script>
+{% endblock %}
+</body>
+</html>
+ 

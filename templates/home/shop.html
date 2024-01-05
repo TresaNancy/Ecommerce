@@ -1,5 +1,18 @@
 {% extends 'base.html' %}
 {% load static %}
+<link rel="stylesheet" href="bootstrap.min.css">
+  <!-- Other CSS/JS links -->
+
+  <script src="jquery.min.js"></script>
+  <script src="bootstrap.min.js"></script>
+
+  <script>
+    // Initialize dropdowns
+    $(document).ready(function() {
+      $('.dropdown-toggle').dropdown();
+    });
+  </script>
+
 <style>
     
     .product-img img {
@@ -19,84 +32,98 @@
 </style>
 
 {% block content %}
+
+
 <!-- Shop Start -->
     <div class="container-fluid">
         <div class="row px-xl-5">
             {% include 'home/shop_sidebar.html' %}   
+        </div> 
 
-
-            <!-- Shop Product Start -->
-            <div class="col-lg-9 col-md-8">
-                <div class="row pb-3">
-                    <div class="col-12 pb-1">
-                        <div class="d-flex align-items-center justify-content-between mb-4">
-                            <div>
-                                <button class="btn btn-sm btn-light"><i class="fa fa-th-large"></i></button>
-                                <button class="btn btn-sm btn-light ml-2"><i class="fa fa-bars"></i></button>
-                            </div>
-                            <div class="ml-2">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Sorting</button>
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="#">Latest</a>
-                                        <a class="dropdown-item" href="#">Popularity</a>
-                                        <a class="dropdown-item" href="#">Best Rating</a>
-                                    </div>
+        <!-- Shop Product Start -->
+        <div class="col-lg-9 col-md-8">
+            <div class="row pb-3">
+                <div class="col-12 pb-1">
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <div>
+                            <button class="btn btn-sm btn-light"><i class="fa fa-th-large"></i></button>
+                            <button class="btn btn-sm btn-light ml-2"><i class="fa fa-bars"></i></button>
+                        </div>
+                        {% comment %} <div class="ml-2">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Sorting</button>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" href="#">Price Low - High</a>
+                                    <a class="dropdown-item" href="#">Price High - Low</a>
+                                    <a class="dropdown-item" href="#">Newest First</a>
                                 </div>
-                                <div class="btn-group ml-2">
-                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Showing</button>
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="#">10</a>
-                                        <a class="dropdown-item" href="#">20</a>
-                                        <a class="dropdown-item" href="#">30</a>
-                                    </div>
+                            </div>
+                            <div class="btn-group ml-2">
+                                <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Showing</button>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" href="#">10</a>
+                                    <a class="dropdown-item" href="#">20</a>
+                                    <a class="dropdown-item" href="#">30</a>
+                                </div>
+                            </div>
+                        </div> {% endcomment %}
+                    </div>
+                </div>
+                
+                
+
+                
+                
+                
+                {% for product in products %} 
+                
+                    <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
+                        <div class="product-item bg-light mb-4" >
+                            <div class="product-img position-relative overflow-hidden ">
+                                {% comment %} <img class="img-fluid w-100" src="{{product.product_images.first.image.url}}" alt=""style="width:auto; height: 400px;" > {% endcomment %}
+                                <img src="{{product.images.url}}" alt=""style="width:auto; height: 400px;" >
+                                <div class="product-action" >
+                                    <form method="post" action="{% url 'product_details' product.id %}">
+                                        {% csrf_token %}
+                                        {% comment %} <button type="submit"  class="btn btn-outline-dark btn-square" name="add_to_cart">
+                                            <i class="fa fa-shopping-cart"></i>
+                                        </button> {% endcomment %}
+                                    </form>
+                                    <a class="btn btn-outline-dark btn-square" href="{% url 'product_details' product.id %}"><i class="fa fa-shopping-cart"></i></a>
+                                    <a class="btn btn-outline-dark btn-square" href="{% url 'product_details' product.id %}"><i class="far fa-heart"></i></a>
+                                    <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
+                                    <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
+                                </div>
+                            </div>
+                            <div class="text-center py-4">
+                                <a class="h6 text-decoration-none text-truncate" href="{% url 'product_details' product.id %}">{{product.product_description}}</a>
+                                <div class="d-flex align-items-center justify-content-center mt-2">
+                                    <h6 class="text-muted ml-2">{{product.brand}}</h6>
+                                    
+                                </div>
+                                <div class="d-flex align-items-center justify-content-center mt-1">
+                                    <h5> ₹ {{ product.product_price}}</h5>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-center mb-1">
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    
                                 </div>
                             </div>
                         </div>
                     </div>
-                   
-                  
-
-                   
-                   
-                    
-                    {% for product in products %} 
-                   
-                        <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
-                            <div class="product-item bg-light mb-4">
-                                <div class="product-img position-relative overflow-hidden">
-                                    <img class="img-fluid w-100" src="{{product.product_image.url}}" alt="">
-                                    <div class="product-action">
-                                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
-                                        <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-                                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
-                                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
-                                    </div>
-                                </div>
-                                <div class="text-center py-4">
-                                    <a class="h6 text-decoration-none text-truncate" href="{% url 'detail' product.id %}">{{product.product_title}}</a>
-                                    <div class="d-flex align-items-center justify-content-center mt-2">
-                                        <h6 class="text-muted ml-2">{{product.regular_price}}</h6>
-                                        <h5>{{product.brand.brand_name}}</h5>
-                                    </div>
-                                    <div class="d-flex align-items-center justify-content-center mb-1">
-                                        <small class="fa fa-star text-primary mr-1"></small>
-                                        <small class="fa fa-star text-primary mr-1"></small>
-                                        <small class="fa fa-star text-primary mr-1"></small>
-                                        <small class="fa fa-star text-primary mr-1"></small>
-                                        <small class="fa fa-star text-primary mr-1"></small>
-                                        <small>{{product.sub_category.sub_category_name}}</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    
-                    {%endfor%}
-            <!-- Shop Product End -->
-        </div>
+                
+                {%endfor%}
+        <!-- Shop Product End -->
+    
     </div>
     <!-- Shop End -->
 {% endblock %}
+{%block footer%}
+{%endblock footer%}
 
 
     

@@ -1,204 +1,29 @@
- {% load static%}
-<!DOCTYPE HTML>
-<html lang="en">
+{% extends 'adminpanel_base.html' %}
+{% load static %}
+{% block content%}
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
 
 
-<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-form-product-1.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:31 GMT -->
-<head>
-    <meta charset="utf-8">
-    <title>Explore Junction Dashboard</title>
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta property="og:title" content="">
-    <meta property="og:type" content="">
-    <meta property="og:url" content="">
-    <meta property="og:image" content="">
-    <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="{%static 'adminpanel/imgs/theme/favicon.svg' %}">
-    <!-- Template CSS -->
-    <link href="{% static 'adminpanel/css/main.css' %}" rel="stylesheet" type="text/css" />
-</head>
-
-<body>
-    <div class="screen-overlay"></div>
-    <aside class="navbar-aside" id="offcanvas_aside">
-        <div class="aside-top">
-            <a href="{% url 'dashboard' %}" class="brand-wrap">
-                <img src="{% static 'adminpanel/imgs/theme/logos.svg' %}" class="logo" alt="Explore Junction Dashboard">
-            </a>
-            <div>
-                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
-            </div>
-        </div>
-        <nav>
-            <ul class="menu-aside">
-                <li class="menu-item">
-                    <a class="menu-link" href="{% url 'dashboard' %}"> <i class="icon material-icons md-home"></i>
-                        <span class="text">Dashboard</span>
-                    </a>
-                </li>
-                <li class="menu-item has-submenu">
-                    <a class="menu-link" href="{% url 'products_list' %}"> <i class="icon material-icons md-shopping_bag"></i>
-                        <span class="text">Products</span>
-                    </a>
-                    <div class="submenu">
-                        <a href="{% url 'products_list' %}">Product List</a>
-                        <a href="{% url 'products_grid' %}">Product grid</a>
-                        <a href="{% url 'products_grid_2' %}">Product grid 2</a>
-                        <a href="{% url 'categories' %}">Categories</a>
-                    </div>
-                </li>
-                <li class="menu-item has-submenu">
-                    <a class="menu-link" href="{% url 'orders_1' %}"> <i class="icon material-icons md-shopping_cart"></i>
-                        <span class="text">Orders</span>
-                    </a>
-                    <div class="submenu">
-                        <a href="{% url 'orders_1' %}">Order list 1</a>
-                        <a href="{% url 'orders_2' %}">Order list 2</a>
-                        <a href="{% url 'orders_detail' %}">Order detail</a>
-                    </div>
-                </li>
-                <li class="menu-item has-submenu">
-                    <a class="menu-link" href="{% url 'sellers_cards' %}"> <i class="icon material-icons md-store"></i>
-                        <span class="text">Sellers</span>
-                    </a>
-                    <div class="submenu">
-                        <a href="{% url 'sellers_cards' %}">Sellers cards</a>
-                        <a href="{% url 'sellers_list' %}">Sellers list</a>
-                        <a href="{% url 'seller_detail' %}">Seller profile</a>
-                    </div>
-                </li>
-                <li class="menu-item has-submenu active">
-                    <a class="menu-link" href="{% url 'add_product' %}"> <i class="icon material-icons md-add_box"></i>
-                        <span class="text">Add product</span>
-                    </a>
-                    <div class="submenu">
-                        <a href="{% url 'add_product' %}" class="active">Add product 1</a>
-                        <a href="{% url 'form_product_2' %}">Add product 2</a>
-                        <a href="{% url 'form_product_3' %}">Add product 3</a>
-                        <a href="{% url 'form_product_4' %}">Add product 4</a>
-                    </div>
-                </li>
-                <li class="menu-item has-submenu">
-                    <a class="menu-link" href="{% url 'transactions_1' %}"> <i class="icon material-icons md-monetization_on"></i>
-                        <span class="text">Transactions</span>
-                    </a>
-                    <div class="submenu">
-                        <a href="{% url 'transactions_1' %}">Transaction 1</a>
-                        <a href="{% url 'transactions_2' %}">Transaction 2</a>
-                    </div>
-                </li>
-                <li class="menu-item has-submenu">
-                    <a class="menu-link" href="#"> <i class="icon material-icons md-person"></i>
-                        <span class="text">Account</span>
-                    </a>
-                    <div class="submenu">
-                        <a href="{% url 'signin' %}">User login</a>
-                        <a href="{% url 'signup' %}">User registration</a>
-                        <a href="{% url 'error_404' %}">Error 404</a>
-                    </div>
-                </li>
-                <li class="menu-item">
-                    <a class="menu-link" href="{% url 'reviews' %}"> <i class="icon material-icons md-comment"></i>
-                        <span class="text">Reviews</span>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a class="menu-link" href="{% url 'brands' %}"> <i class="icon material-icons md-stars"></i>
-                        <span class="text">Brands</span> </a>
-                </li>
-                <li class="menu-item">
-                    <a class="menu-link" disabled href="#"> <i class="icon material-icons md-pie_chart"></i>
-                        <span class="text">Statistics</span>
-                    </a>
-                </li>
-            </ul>
-            <hr>
-            <ul class="menu-aside">
-                <li class="menu-item has-submenu">
-                    <a class="menu-link" href="#"> <i class="icon material-icons md-settings"></i>
-                        <span class="text">Settings</span>
-                    </a>
-                    <div class="submenu">
-                        <a href="{% url 'settings_1' %}">Setting sample 1</a>
-                        <a href="{% url 'settings_2' %}">Setting sample 2</a>
-                    </div>
-                </li>
-            </ul>
-            <br>
-            <br>
-        </nav>
-    </aside>
-    <main class="main-wrap">
-        <header class="main-header navbar">
-            <div class="col-search">
-                <form class="searchform">
-                    <div class="input-group">
-                        <input list="search_terms" type="text" class="form-control" placeholder="Search term">
-                        <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
-                    </div>
-                    <datalist id="search_terms">
-                        <option value="Products">
-                        <option value="New orders">
-                        <option value="Apple iphone">
-                        <option value="Ahmed Hassan">
-                    </datalist>
-                </form>
-            </div>
-            <div class="col-nav">
-                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="material-icons md-apps"></i> </button>
-                <ul class="nav">
-                    <li class="nav-item">
-                        <a class="nav-link btn-icon" href="#">
-                            <i class="material-icons md-notifications animation-shake"></i>
-                            <span class="badge rounded-pill">3</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
-                    </li>
-                    <li class="dropdown nav-item">
-                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownLanguage" aria-expanded="false"><i class="material-icons md-public"></i></a>
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownLanguage">
-                            <a class="dropdown-item text-brand" href="#"><img src="{% static 'adminpanel/imgs/theme/flag-us.png' %}" alt="English">English</a>
-                            <a class="dropdown-item" href="#"><img src="{% static 'adminpanel/imgs/theme/flag-fr.png' %}" alt="Français">Français</a>
-                            <a class="dropdown-item" href="#"><img src="{% static 'adminpanel/imgs/theme/flag-jp.png' %}" alt="Français">日本語</a>
-                            <a class="dropdown-item" href="#"><img src="{% static 'adminpanel/imgs/theme/flag-cn.png' %}" alt="Français">中国人</a>
-                        </div>
-                    </li>
-                    <li class="dropdown nav-item">
-                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="{% static 'adminpanel/imgs/people/avatar2.jpg' %}" alt="User"></a>
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
-                            <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item text-danger" href="#"><i class="material-icons md-exit_to_app"></i>Logout</a>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </header>
         <section class="content-main">
-            <div class="row">
-                <div class="col-9">
-                    <div class="content-header">
-                        <form method="POST" action="{% url 'add_product' %}" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            <h2 class="content-title">Add New Product</h2>
-                            <div>
-                                <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Save to draft</button>
-                                <button type="submit" class="btn btn-md rounded font-sm hover-up">Publish</button>
-                            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="content-header">
+                            <form method="POST" action="{% url 'add_product' %}" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <h2 class="content-title">Add New Product</h2>
+                                <div>
+                                    {% comment %} <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Save to draft</button> {% endcomment %}
+                                    <button type="submit" class="btn btn-md rounded font-sm hover-up">Publish</button>
+                                </div>
+                            
                         </div>
-                    </div>
-                    <div class="col-lg-6">
                         <div class="card mb-4">
                             <div class="card-header">
                                 <h4>Add New Products</h4>
@@ -213,19 +38,27 @@
                                     <input type="text" class="form-control" id="product_description" name="product_description">
                                 </div>
                                 <div class="row">
-                                    <div class="col-lg-4">
+                                    <div class="col-md-4">
+                                        <div class="mb-4">
+                                            <label class="form-label">Product-Code</label>
+                                            <input type="text" class="form-control" id="product_code" name="product_code">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
                                         <div class="mb-4">
                                             <label class="form-label">Regular price</label>
                                             <input type="text" class="form-control" id="regular_price" name="regular_price">
                                         </div>
                                     </div>
-                                    <div class="col-lg-4">
+                                    <div class="col-md-4">
                                         <div class="mb-4">
                                             <label class="form-label">Quantity</label>
                                             <input type="text" class="form-control" id="quantity" name="quantity">
                                         </div>
                                     </div>
-                                    <div class="col-lg-4">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
                                         <div class="mb-4">
                                             <label for="regular_size" class="form-label">Size</label>
                                             <select class="form-control" id="regular_size" name="regular_size">
@@ -236,59 +69,34 @@
                                             </select>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="mb-4">
-                                        <label for="brand" class="form-label">Brand</label>
-                                        <select class="form-control" id="brand" name="brand">
-                                            <option value="">Select a Brand</option>
-                                            {% for brand in brands %}
-                                                <option value="{{ brand.id }}">{{ brand.brand_name }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="mb-4">
-                                        <label for="colour" class="form-label">Colour</label>
-                                        <select class="form-control" id="colour" name="colour">
-                                            <option value="">Select a Colour</option>
-                                            {% for colour in colours %}
-                                                <option value="{{ colour.id }}">{{ colour.colour }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> <!-- card end// -->
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <h4>Additional Information</h4>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-lg-6">
+                                    <div class="col-md-4">
                                         <div class="mb-4">
-                                            <label for="width" class="form-label">Width</label>
-                                            <input type="text" class="form-control" id="width" name="width">
+                                            <label for="brand" class="form-label">Brand</label>
+                                            <select class="form-control" id="brand" name="brand">
+                                                <option value="">Select a Brand</option>
+                                                {% for brand in brands %}
+                                                    <option value="{{ brand.id }}">{{ brand.brand_name }}</option>
+                                                {% endfor %}
+                                            </select>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6">
+                                    <div class="col-md-4">
                                         <div class="mb-4">
-                                            <label for="height" class="form-label">Height</label>
-                                            <input type="text" class="form-control" id="height" name="height">
+                                            <label for="product_colour" class="form-label">Colour</label>
+                                            <select class="form-control" id="product_colour" name="product_colour">
+                                                <option value="">Select a Colour</option>
+                                                {% for colour in colours %}
+                                                    <option value="{{ colour.id }}">{{ colour.product_colour }}</option>
+                                                {% endfor %}
+                                            </select>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="mb-4">
-                                    <label for="weight" class="form-label">Weight</label>
-                                    <input type="text" class="form-control" id="weight" name="weight">
                                 </div>
                             </div>
                         </div> <!-- card end// -->
                     </div>
-                    <div class="col-lg-3">
-                        <div class="card mb-4">
+                    <div class="col-md-3">
+                        <div class="card mb-4 mt-3">
                             <div class="card-header">
                                 <h4>Product Image</h4>
                             </div>
@@ -302,7 +110,7 @@
                         <div class="card-header">
                             <div class="row gx-2">
                                 <div class="col-sm-6 mb-3">
-                                    <label class="form-label"> Category</label>
+                                    <label class="form-label">Category</label>
                                     <select class="form-control" id="category" name="category">
                                         <option value="">Select</option>
                                         {% for category in categories %}
@@ -323,182 +131,13 @@
                                         {% endfor %}
                                     </select>
                                 </div>
+                            </form>
                             </div>
                         </div> <!-- row.// -->
                     </div>
                 </div> <!-- card end// -->
             </div>
         </section>
-        {% comment %} <section class="content-main">
-            <div class="row">
-                <div class="col-9">
-                    <div class="content-header">
-                        <form method="POST" action="{% url 'add_product' %}" enctype="multipart/form-data">
-                            {% csrf_token %}
-                        
-                        <h2 class="content-title">Add New Product</h2>
-                        <div>
-                            <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Save to draft</button>
-                            <button type="submit" class="btn btn-md rounded font-sm hover-up">Publish</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <h4>Add New Products</h4>
-                        </div>
-                        <div class="card-body">
-                           
-                    
-                                <div class="mb-4">
-                                    <label for="product_title" class="form-label">Product title</label>
-                                    <input type="text" placeholder="product_title" class="form-control" id="product_title" name="product_title" required>
-                                </div>
-                                <div class="mb-4">
-                                    <label class="form-label">Product description</label>
-                                    <input type="text" placeholder="product_description" class="form-control" id="product_description" name="product_description">
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <div class="mb-4">
-                                            <label class="form-label">Regular price</label>
-                                            <input type="text" placeholder=" regular_price" class="form-control" id=" regular_price" name="regular_price">
-    
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="mb-4">
-                                            <label class="form-label">Quantity</label>
-                                            <input type="text" placeholder="quantity" class="form-control" id="quantity" name="quantity">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="mb-4">
-                                            <label for="size" class="form-label">Size</label>
-                                            <select class="form-control" id="regular_size" name="regular_size">
-                                                <option value="">Select a Size</option>
-                                                {% for size in sizes %}
-                                                    <option value="{{ size.regular_size }}">{{ size.regular_size }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="mb-4">
-                                        <label for="brand" class="form-label">Brand</label>
-                                        <select class="form-control" id="brand" name="brand">
-                                            <option value="">Select a Brand</option>
-                                            {% for brand in brands %}
-                                                <option value="{{ brand.id }}">{{ brand.brand_name }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                </div>
-                                
-                           
-                        </div>
-                    </div> <!-- card end// -->
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <h4>Additional Information</h4>
-                        </div>
-                        <div class="card-body">
-                            <form>
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="mb-4">
-                                            <label for="width" class="form-label">Width</label>
-                                            <input type="text" placeholder="inch" class="form-control" id="width" name="width">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-4">
-                                            <label for="height" class="form-label">Height</label>
-                                            <input type="text" placeholder="in cm" class="form-control" id="height" name="height">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mb-4">
-                                    <label for="weight" class="form-label">Weight</label>
-                                    <input type="text" placeholder="gam" class="form-control" id="product_name" name="weight">
-                                </div>
-                            </form>
-                        </div>
-                    </div> <!-- card end// -->
-                </div>
-                <div class="col-lg-3">
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <h4>Product Image</h4>
-                        </div>
-                        {% comment %} <div class="form-group">
-                            <label for="productImage" class="form-label">Product Image</label>
-                            <input type="file" class="form-control" id="productImage" name="product_image" required>
-                          </div> {% endcomment %}
-                         {% comment %} <div class="card-body">
-                            <div class="input-upload" >
-                                <img src="{% static 'adminpanel/imgs/theme/upload.svg' %}" alt="">
-                                <input class="form-control" type="file" name="product_image">
-                            </div>
-                        </div>
-                    </div> 
-                    <div class="card-header">
-                        <div class="row gx-2">
-                            <div class="col-sm-6 mb-3">
-                                <label class="form-label"> Category</label>
-                                <select class="form-control" id="category" name="category">
-                                    <option value="">Select</option>
-                                    {% for category in categories%}
-                                        <option value="{{   category.category_name }}">{{ category.category_name }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                            
-                                <div class="card-header">
-                                    <div class="row gx-2">
-                                        <div class="col-sm-6 mb-3">
-                                            <label class="form-label">Sub Category</label>
-                                            <select class="form-control" id="sub_category" name="sub_category">
-                                                <option value="">Select </option>
-                                                {% for sub_category in sub_categories %}
-                                                    <option value="{{ sub_category.sub_category_name }}">{{ sub_category.sub_category_name }}</option>
-                                                {% endfor %}
-                                            </select>
-                                            
-                                        </div>
-                                    </div>
-                                </form>
-                                </div> <!-- row.// -->
-                        </div>
-                    </div> <!-- card end// --> 
-        </section> <!-- content-main end// --> {% endcomment %}
-        <footer class="main-footer font-xs">
-            <div class="row pb-30 pt-15">
-                <div class="col-sm-6">
-                    <script>
-                    document.write(new Date().getFullYear())
-                    </script> ©, Explore Junction
-                </div>
-                <div class="col-sm-6">
-                    <div class="text-sm-end">
-                        All rights reserved
-                    </div>
-                </div>
-            </div>
-        </footer>
-    </main>
-    <script src="{% static 'adminpanel/js/vendors/jquery-3.6.0.min.js' %}"></script>
-    <script src="{% static 'adminpanel/js/vendors/bootstrap.bundle.min.js' %}"></script>
-    <script src="{% static 'adminpanel/js/vendors/select2.min.js' %}"></script>
-    <script src="{% static 'adminpanel/js/vendors/perfect-scrollbar.js' %}"></script>
-    <script src="{% static 'adminpanel/js/vendors/jquery.fullscreen.min.js' %}"></script>
-    <!-- Main Script -->
-    <script src="{% static 'adminpanel/js/main.js' %}" type="text/javascript"></script>
-</body>
-
-
-
-</html> 
+        
+       {% endblock%} 
+        

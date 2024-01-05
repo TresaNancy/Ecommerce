@@ -1,0 +1,105 @@
+{% extends 'adminpanel_base.html' %}
+{% load static %}
+{% block content%}
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+
+
+        
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Brands </h2>
+            <p>Add, edit, or delete a Brand</p>
+        </div>
+        <div>
+            <input type="text" placeholder="Search Brands" class="form-control bg-white">
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <form method="post" action="{% url 'add_brand' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="create_brand" value="true">
+                        <div class="mb-4">
+                            <label for="brand_name" class="form-label">Brand Name</label>
+                            <input type="text" placeholder="Type here" class="form-control" id="brand_name" name="brand_name" />
+                        </div>
+                        <div class="mb-4">
+                            <label for="quantity" class="form-label">Quantity</label>
+                            <input type="text" placeholder="Type here" class="form-control" id="quantity" name="quantity"/>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Description</label>
+                            <textarea placeholder="Type here" class="form-control" name="description"></textarea>
+                        </div>
+                        <div class="mb-4">
+                            <div class="input-upload">
+                                <img src="{% static 'adminpanel/imgs/theme/upload.svg' %}" alt="">
+                                <input class="form-control" type="file" name="brand_image" required>
+                            </div>
+                        </div>
+                        <div class="d-grid">
+                            <button class="btn btn-primary" type="submit">Create Brand</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-9">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" />
+                                        </div>
+                                    </th>
+                                    <th>Name</th>
+                                    <th>Quantity</th>
+                                    <th>Description</th>
+                                    
+                                    <th>Logo</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                                {% for brand in brands %}
+                                <form method="post" action="{% url 'edit_brand' %}">
+                                    {% csrf_token %}
+                                    
+                                    <tr>
+                                        <td class="text-center">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="" />
+                                            </div>
+                                        </td>
+                                        <td><input type="text" name="brand_name" value="{{ brand.brand_name }}"></td>
+                                        <td><input type="text" name="quantity" value="{{ brand.quantity }}"></td>
+                                        <td><textarea name="description">{{ brand.description }}</textarea></td>
+                                        <td><img class="img-fluid w-100" src="{{brand.brand_image.url}}" alt=""style="width: 20px; height: 40px;"></td>
+                                        <td><button type="submit" name="edit_brand" value="{{ brand.id }}" class="btn btn-light rounded btn-sm font-sm"> <i class="fas fa-pencil-alt"></i> </button></td>
+                                        <td><button type="submit" name="delete_brand" value="{{ brand.id }}" class="dropdown-item text-danger">Delete</button></td>
+                                        
+                                    </tr>
+                                    {% endfor %}
+                                </form> 
+                            </tbody>
+                        </table>
+                    </div>
+                </div> <!-- .col// -->
+            </div> <!-- .row // -->
+        </div> <!-- card body .// -->
+    </div> <!-- card .// -->
+</section> <!-- content-main end// -->
+{% endblock %}
+
